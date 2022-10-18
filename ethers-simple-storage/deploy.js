@@ -1,14 +1,14 @@
+import dotenv from "dotenv";
 import ethers from "ethers";
 import fs from "fs";
 
+dotenv.config();
+
+const { PRIVATE_KEY, RPC_URL } = process.env;
+
 async function main() {
-  const provider = new ethers.providers.JsonRpcProvider(
-    "http://127.0.0.1:7545"
-  );
-  const wallet = new ethers.Wallet(
-    "69dc82b9c73fd63381bcfdf0fb22ebe66209781b560fb611af46439038161347",
-    provider
-  );
+  const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+  const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
   const abi = fs.readFileSync("./SimpleStorage_sol_SimpleStorage.abi", "utf-8");
   const binary = fs.readFileSync(
     "./SimpleStorage_sol_SimpleStorage.bin",
@@ -21,7 +21,11 @@ async function main() {
   await contract.deployTransaction.wait(1);
 
   const favNum = await contract.retrieve();
-  console.log(favNum);
+  console.log(`Currrent favNum is ${favNum.toString()}`);
+  const transactionResponse = await contract.store("29");
+  const transactionReceipt = await transactionResponse.wait(1);
+  const updatedFavNum = await contract.retrieve();
+  console.log(`Updated favorite number is ${updatedFavNum}`);
 }
 
 main()
