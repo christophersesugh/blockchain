@@ -3,10 +3,21 @@ pragma solidity ^0.8.8;
 
 import "./PriceConverter.sol";
 
-error NotOwner();
+error FundMe_NotOwner();
+
+// Interfaces, libraries, then contracts
+/**
+ * @title Acontract for cloud funding
+ * @author Christopher Sesugh
+ * @notice This contract is to demo a sample funding contract
+ * @dev This implements pricefeeds as our library
+ */
 
 contract FundMe {
+    //Type decorations
     using PriceConverter for uint256;
+
+    // State variables
     uint256 public constant MINIMUM_USD = 50 * 1e18;
     address[] public funders;
     mapping(address => uint256) public addressToAmountFunded;
@@ -15,9 +26,35 @@ contract FundMe {
 
     AggregatorV3Interface public priceFeed;
 
+    modifier onlyOwner() {
+        //    require(msg.sender == i_owner, "Sender is not owner");
+        if (msg.sender != i_owner) {
+            revert FundMe_NotOwner();
+        }
+        _;
+    }
+
+    // FUNCTIONS
+    //constructor
+    //receive
+    //fallback
+    //external
+    //public
+    //internal
+    //private
+    //view / pure
+
     constructor(address priceFeedAddress) {
         i_owner = msg.sender;
         priceFeed = AggregatorV3Interface(priceFeedAddress);
+    }
+
+    receive() external payable {
+        fund();
+    }
+
+    fallback() external payable {
+        fund();
     }
 
     function fund() public payable {
@@ -56,13 +93,5 @@ contract FundMe {
             value: address(this).balance
         }("");
         require(callSuccess, "Call failed");
-    }
-
-    modifier onlyOwner() {
-        //    require(msg.sender == i_owner, "Sender is not owner");
-        if (msg.sender != i_owner) {
-            revert NotOwner();
-        }
-        _;
     }
 }
