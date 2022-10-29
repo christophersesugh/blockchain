@@ -18,7 +18,7 @@ contract FundMe {
     using PriceConverter for uint256;
 
     // State variables
-    uint256 public constant MINIMUM_USD = 50 * 1e18;
+    uint256 public constant MINIMUM_USD = 50 * 10**18;
     address[] public funders;
     mapping(address => uint256) public addressToAmountFunded;
 
@@ -49,14 +49,18 @@ contract FundMe {
         priceFeed = AggregatorV3Interface(priceFeedAddress);
     }
 
-    receive() external payable {
-        fund();
-    }
+    // receive() external payable {
+    //     fund();
+    // }
 
-    fallback() external payable {
-        fund();
-    }
+    // fallback() external payable {
+    //     fund();
+    // }
 
+    /**
+     * @notice This function funds this contract
+     * @dev This implements pricefeeds as our library
+     */
     function fund() public payable {
         //want to be able to set a minimum fund amount in USD
         //1. how do we send eth to this contract
