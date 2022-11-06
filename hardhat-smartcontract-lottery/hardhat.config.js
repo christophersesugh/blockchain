@@ -1,14 +1,12 @@
-import "@nomiclabs/hardhat-waffle";
-import "@nomiclabs/hardhat-etherscan";
-import "hardhat-deploy";
-import "solidity-coverage";
-import "hardhat-gas-reporter";
-import "hardhat-contract-sizer";
-import dotenv from "dotenv";
-
-dotenv.config();
+require("@nomiclabs/hardhat-waffle");
+require("@nomiclabs/hardhat-etherscan");
+require("hardhat-deploy");
+require("solidity-coverage");
+require("hardhat-gas-reporter");
+require("hardhat-contract-sizer");
+require("dotenv").config();
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.17",
+    solidity: "0.8.17",
 };
