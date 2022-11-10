@@ -35,24 +35,17 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     const gasLane = networkConfig[chainId]["gasLane"];
     const callbackGasLimit = networkConfig[chainId]["callbackGasLimit"];
     const interval = networkConfig[chainId]["interval"];
-    // const args = [
-    //     vrfCoordinatorV2Address,
-    //     entranceFee,
-    //     gasLane,
-    //     subscriptionId,
-    //     callbackGasLimit,
-    //     interval,
-    // ];
+    const args = [
+        vrfCoordinatorV2Address,
+        entranceFee,
+        gasLane,
+        subscriptionId,
+        callbackGasLimit,
+        interval,
+    ];
     const raffle = await deploy("Raffle", {
         from: deployer,
-        args: [
-            vrfCoordinatorV2Address,
-            entranceFee,
-            gasLane,
-            subscriptionId,
-            callbackGasLimit,
-            interval,
-        ],
+        args: args,
         log: true,
         waitConfirmations: network.config.blockConfirmations || 1,
     });
